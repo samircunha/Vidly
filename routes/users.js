@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const { Users } = require("../models/users");
 const { validateUser } = require("../models/users");
 const auth = require("../middlewares/auth");
+const admin = require("../middlewares/admin");
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get("/me", auth, async (req, res) => {
   res.send(user);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

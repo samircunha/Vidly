@@ -1,3 +1,7 @@
+require("dotenv").config();
+
 module.exports = function () {
-  require("dotenv").config();
+  if(!process.env.JWTPRIVATEKEY){
+    throw new Error("FATAL ERROR: JWTPRIVATEKEY is not defined");
+  }
 };

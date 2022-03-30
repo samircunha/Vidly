@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const winston = require("winston");
 
 module.exports = function () {
-    mongoose.connect(process.env.DB)
-        .then(()=>{
-            console.log('Connected on MongoDB');
-        }).catch(ex => console.log(ex.message)); 
-}
+  mongoose.connect(process.env.DB).then(() => {
+    winston.info("Connected on MongoDB");
+  });
+};
