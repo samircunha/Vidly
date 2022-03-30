@@ -5,8 +5,9 @@ const bcrypt = require("bcryptjs");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello World");
+router.get("/me", (req, res) => {
+  const user = Users.findById(req.user._id).select('-password');
+  res.send(user);
 });
 
 router.post("/", async (req, res) => {

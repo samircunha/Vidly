@@ -9,4 +9,5 @@ module.exports = function (app) {
   app.use("/api/genres", genres);
   app.use("/api/movies", movies);
   app.use('/api/users', users);
+  app.use('/api/auth', users);
 };
