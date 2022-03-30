@@ -1,14 +1,15 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const router = express.Router();
 
 const { Customer } = require("../models/customer");
 const { validateCustomer } = require("../models/customer");
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const customers = await Customer.find();
   res.send(customers);
 });
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validateCustomer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -21,10 +22,13 @@ router.post("/", async (req, res) => {
 
   res.send(customer);
 });
-router.put("/", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const customer = await Customer.findByIdAndUpdate(
     { _id: req.params.id },
-    { phone: req.body?.phone },
+    { 
+      phone: req.body?.phone,
+      isGold: req.body?.isGold,
+    },
     { new: true }
   );
 

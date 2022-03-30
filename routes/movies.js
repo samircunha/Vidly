@@ -2,6 +2,7 @@ const express = require("express");
 const { Movies } = require("../models/movie");
 const { Genres } = require("../models/genre");
 const { validateMovie } = require("../models/movie");
+const auth = require("../middlewares/auth");
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.get("/:id", async (req, res) => {
   res.send(movie);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validateMovie(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -38,20 +39,20 @@ router.post("/", async (req, res) => {
   res.send(movie);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const movie = await Movies.findByIdAndUpdate(
     { _id: req.params.id },
     {
       numberInStock: req.body?.numberInStock,
       dailyRentalRate: req.body?.dailyRentalRate,
     },
-    {new: true}
+    { new: true }
   );
 
   res.send(movie);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const movie = await Movies.findByIdAndDelete({ _id: req.params.id });
   if (!movie) return res.status(400).send("Genre does not exists.");
 

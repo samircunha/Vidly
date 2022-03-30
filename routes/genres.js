@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const { Genres } = require("../models/genre");
 const { genreValidate } = require("../models/genre");
 const router = express.Router();
@@ -14,7 +15,7 @@ router.get("/:id", async (req, res) => {
   res.send(genre);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -27,7 +28,7 @@ router.post("/", async (req, res) => {
   res.send(genre);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const genre = await Genres.findByIdAndDelete({ _id: req.params.id });
   if (!genre) return res.status(400).send("Genre does not exists.");
 

@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../middlewares/auth");
 const router = express.Router();
 
 const { Customer } = require("../models/customer");
@@ -6,12 +7,12 @@ const { Movies } = require("../models/movie");
 const { Rentals } = require("../models/rentals");
 const { validateRental } = require("../models/rentals");
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const rentals = await Rentals.find();
   res.send(rentals);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validateRental(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -40,21 +41,21 @@ router.post("/", async (req, res) => {
   const session = await Rentals.startSession();
   session.startTransaction();
 
-  try{
-      rental = await rental.save();
+  try {
+    rental = await rental.save();
 
-      movie.numberInStock--;
-      movie.save();
+    movie.numberInStock--;
+    movie.save();
 
-      await session.commitTransaction();
-      session.endSession();
+    await session.commitTransaction();
+    session.endSession();
 
-      res.send(rental);
-  } catch(ex){
-      session.abortTransaction();
-      session.endSession();
+    res.send(rental);
+  } catch (ex) {
+    session.abortTransaction();
+    session.endSession();
 
-      return res.status(500).send(ex.message);
+    return res.status(500).send(ex.message);
   }
 });
 
