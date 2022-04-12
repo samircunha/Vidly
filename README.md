@@ -10,7 +10,6 @@ Table of Contents
   * [About the project](#-about-project)
   * [Technologies](#-technologies)
   * [Functionalities](#-functionalities)
-  * [Layout](#-layout)
   * [How to use](#-how-to-use)
 <!--te-->
 
