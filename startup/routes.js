@@ -7,8 +7,10 @@ const auth = require('../routes/auth');
 const customers = require('../routes/customers');
 const rentals = require('../routes/rentals');
 const error = require('../middlewares/error');
+const cors = require('cors');
 
 module.exports = function (app) {
+  app.use(cors());
   app.use(express.json());
   app.use("/api/genres", genres);
   app.use("/api/movies", movies);
